@@ -127,3 +127,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+*.ui
+update_admin_interface.py
+checkbox.py
+*.jpg
+
+
