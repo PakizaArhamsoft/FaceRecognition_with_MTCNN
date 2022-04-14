@@ -30,14 +30,15 @@ class Detector():
 
         # store the results in tuple format in list
         results = []
+        person_name = "Not Recognized!"
         for face_crop, box in zip(Face_crops, face_bboxes):
             # get face embedding
             face_embd = self.FaceRecog.get_face_embedding(face_crop)
             # get person_name and distance
             person_name, distance = self.FaceRecog.Whoisit(face_embd)
-            results.append((distance, person_name, box))
+            # results.append((distance, person_name, box))
         
-        return results
+        return person_name
 
     def draw_results(self, image, infer_results, 
                     color=(255,0,0),box_thickness=None,
