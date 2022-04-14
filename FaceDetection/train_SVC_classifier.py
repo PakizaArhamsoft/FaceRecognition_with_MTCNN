@@ -1,5 +1,6 @@
 import keras
 import os
+import json
 from mtcnn.mtcnn import MTCNN
 from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import LabelEncoder
@@ -62,7 +63,7 @@ def get_embedding(model, face):
     yhat = model.predict(sample)
     return yhat[0]
 
-def svc_classifier(emdTrainX, emdTestX):
+def svc_classifier(emdTrainX, emdTestX,trainy,testy):
     print("Dataset: train=%d, test=%d" % (emdTrainX.shape[0], emdTestX.shape[0]))
     # normalize input vectors
     in_encoder = Normalizer()
@@ -73,6 +74,12 @@ def svc_classifier(emdTrainX, emdTestX):
     out_encoder.fit(trainy)
     trainy_enc = out_encoder.transform(trainy)
     testy_enc = out_encoder.transform(testy)
+    
+    # Dictionary to decode labels
+    class_decode = {k:v for (k,v) in enumerate(out_encoder.classes_)}
+    with open(os.path.join("models/", "decode.json"), "w") as file:
+        json.dump(class_decode, file)
+
     # fit model
     model = SVC(kernel='linear', probability=True)
     model.fit(emdTrainX_norm, trainy_enc)
@@ -85,32 +92,3 @@ def svc_classifier(emdTrainX, emdTestX):
     score_test = accuracy_score(testy_enc, yhat_test)
     # summarize
     print('Accuracy: train=%.3f, test=%.3f' % (score_train*100, score_test*100))
-
-train_dir = os.listdir("data/train/")
-test_dir = os.listdir("data/test/")
-
-trainX, trainy = load_dataset('data/train/')
-testX, testy = load_dataset('data/test/')
-
-facenet_model = keras.models.load_model('models/FaceNet_Keras_converted.h5')
-print('Loaded Model')
-
-# convert each face in the train set into embedding
-emdTrainX = list()
-for face in trainX:
-    emd = get_embedding(facenet_model, face)
-    emdTrainX.append(emd)
-    
-emdTrainX = np.asarray(emdTrainX)
-print(emdTrainX.shape)
-
-# convert each face in the test set into embedding
-emdTestX = list()
-for face in testX:
-    emd = get_embedding(facenet_model, face)
-    emdTestX.append(emd)
-emdTestX = np.asarray(emdTestX)
-print(emdTestX.shape)
-
-
-svc_classifier(emdTrainX, emdTestX)

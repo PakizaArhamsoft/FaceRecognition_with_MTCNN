@@ -84,8 +84,6 @@ class FaceDetector():
 
 		"""
 		image = img.copy()
-		cv2.imshow("image", image)
-		cv2.waitKey(3)
 		face_crops = []
 		for box in bboxes:
 			# unstack box
