@@ -1,23 +1,39 @@
-import os
-from utils import Detector
-import cv2
+import keras
+import numpy as np
+import db_connection as dbc
+from FaceDetection import train_SVC_classifier as tsvc
 
-# Set directories
-BASE_DIR = "test_images"
-list_imgs = os.listdir("test_images")
+def train_data():
+	conn,cur = dbc.connect_db()
+	train_images = dbc.get_train_img_data(conn,cur)
+	test_images =  dbc.get_test_img_data(conn,cur)
+	train_dir = train_images[0][0].split('/')
+	test_dir = test_images[0][0].split('/')
 
-# create detector object
-detector = Detector()
+	trainX, trainy = tsvc.load_dataset(train_dir[0]+"/"+train_dir[1]+"/")
+	testX, testy = tsvc.load_dataset(test_dir[0]+"/"+test_dir[1]+"/")
 
-for im in list_imgs:
-	img = cv2.imread(os.path.join(BASE_DIR, im))
-	img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-	img = cv2.resize(img,(460,460))
-	# get predictions and draw them on image
-	predictions = detector.get_people_names(img, speed_up=False, downscale_by=1)
-	annoted_image = detector.draw_results(img, predictions)
+	facenet_model = keras.models.load_model('models/FaceNet_Keras_converted.h5')
+	print('Loaded Model')
 
-	image = cv2.cvtColor(annoted_image, cv2.COLOR_RGB2BGR)
-	cv2.imwrite(f"Detect_images/{im.split('.')[0]}_infered.png", image)
-	cv2.imshow("image", image)
-	cv2.waitKey(3)
+	# convert each face in the train set into embedding
+	emdTrainX = list()
+	for face in trainX:
+		emd = tsvc.get_embedding(facenet_model, face)
+		emdTrainX.append(emd)
+
+	emdTrainX = np.asarray(emdTrainX)
+	print(emdTrainX.shape)
+
+	# convert each face in the test set into embedding
+	emdTestX = list()
+	for face in testX:
+		emd = tsvc.get_embedding(facenet_model, face)
+		emdTestX.append(emd)
+	emdTestX = np.asarray(emdTestX)
+	print(emdTestX.shape)
+
+
+	tsvc.svc_classifier(emdTrainX, emdTestX,trainy,testy)
+
+train_data()
