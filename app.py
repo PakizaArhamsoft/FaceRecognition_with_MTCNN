@@ -36,4 +36,3 @@ def train_data():
 
 	tsvc.svc_classifier(emdTrainX, emdTestX,trainy,testy)
 
-train_data()

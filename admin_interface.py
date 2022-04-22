@@ -6,7 +6,7 @@ from PIL import Image
 import db_connection as dbc
 from PyQt5.QtMultimediaWidgets import *
 from FaceDetection.FaceDetector import FaceDetector
-FaceDetect = FaceDetector()
+
 
 class CreateUser(QtWidgets.QMainWindow):
     def __init__(self):
@@ -169,9 +169,9 @@ class CreateUser(QtWidgets.QMainWindow):
     def ImageUpdateSlot(self, Image):
         self.video.setPixmap(QtGui.QPixmap.fromImage(Image))
         
-if __name__ == "__main__":
-    import sys 
-    app = QtWidgets.QApplication(sys.argv)
-    ui = CreateUser()
-    ui.show()
-    sys.exit(app.exec_())
+# if __name__ == "__main__":
+#     import sys 
+#     app = QtWidgets.QApplication(sys.argv)
+#     ui = CreateUser()
+#     ui.show()
+#     sys.exit(app.exec_())

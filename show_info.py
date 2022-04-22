@@ -63,10 +63,10 @@ class PersonHistory(QtWidgets.QMainWindow):
             self.error_msg.adjustSize()
 
 
-if __name__ == "__main__":
-    import sys 
-    app = QtWidgets.QApplication(sys.argv)
-    ui = PersonHistory()
-    ui.show()
-    sys.exit(app.exec_())
+# if __name__ == "__main__":
+#     import sys 
+#     app = QtWidgets.QApplication(sys.argv)
+#     ui = PersonHistory()
+#     ui.show()
+#     sys.exit(app.exec_())
 

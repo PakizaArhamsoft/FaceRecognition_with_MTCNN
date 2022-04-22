@@ -8,7 +8,7 @@ from FaceDetection.FaceDetector import FaceDetector
 import detect_person as dp
 import db_connection as dbc
 
-FaceDetect = FaceDetector()
+
 check = 0
 
 class MainWindow(QWidget):
@@ -47,6 +47,7 @@ class MainWindow(QWidget):
         self.capture_img = capture_img()
 
         self.capture_img.start()
+        print("hello")
         self.capture_img.ImageUpdate.connect(self.ImageUpdateSlot)
         self.setLayout(self.VBL)
         self.timer.timeout.connect(self.setDateTime)
@@ -96,6 +97,7 @@ class capture_img(QThread):
     msg = ""
 
     def run(self):
+        FaceDetect = FaceDetector()
         self.ThreadActive = True
         Capture = cv2.VideoCapture(0)
         while self.ThreadActive:
@@ -103,6 +105,7 @@ class capture_img(QThread):
             if ret:
                 Image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 FlippedImage = cv2.flip(Image, 1)
+                
                 faces = FaceDetect.detect_faces(FlippedImage)
                 
                 # Draw a rectangle around the faces
@@ -165,10 +168,10 @@ class capture_img(QThread):
 
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     
-    App = QApplication(sys.argv)
-    # capture_img = capture_img()
-    Root = MainWindow()
-    Root.show()
-    sys.exit(App.exec())
+#     App = QApplication(sys.argv)
+#     # capture_img = capture_img()
+#     Root = MainWindow()
+#     Root.show()
+#     sys.exit(App.exec())
