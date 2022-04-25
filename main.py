@@ -13,6 +13,7 @@ class Start_Page(QtWidgets.QMainWindow):
         super().__init__()
 
         self.window = uic.loadUi("main.ui", self)
+        self.Root = TakeAttend()
         self.action_Add_User.triggered.connect(self.show_add_user_page)
         self.action_Show_Info.triggered.connect(self.show_info_page)
         self.action_Train_Data.triggered.connect(self.training_data)
@@ -20,12 +21,12 @@ class Start_Page(QtWidgets.QMainWindow):
 
 
     def show_add_user_page(self):
-        self.close()
+        # self.hide()
         add_user = CreateUser()
         add_user.show()
     
     def show_info_page(self):
-        self.close()
+        # self.hide()
         ui = PersonHistory()
         ui.show()
 
@@ -33,18 +34,25 @@ class Start_Page(QtWidgets.QMainWindow):
         train_data()
         self.msg.setText("Done!!")
         time.sleep(30)
-        self.close()
 
     def show_take_attend_page(self):
-        self.close()
-        Root = TakeAttend()
-        Root.show()
+        # self.hide()
+        self.Root.show()
 
-    
+    def closeEvent(self, event):
+        reply = QtWidgets.QMessageBox.question(self, 'Window Close', 'Are you sure you want to close the window?',
+                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
 
-# if __name__ == "__main__":
-#     import sys 
-#     app = QtWidgets.QApplication(sys.argv)
-#     ui = Start_Page()
-#     ui.show()
-#     sys.exit(app.exec_())
+        if reply == QtWidgets.QMessageBox.Yes:
+            event.accept()
+            print('Window closed')
+        else:
+            event.ignore()
+ 
+
+if __name__ == "__main__":
+    import sys 
+    app = QtWidgets.QApplication(sys.argv)
+    ui = Start_Page()
+    ui.show()
+    sys.exit(app.exec_())

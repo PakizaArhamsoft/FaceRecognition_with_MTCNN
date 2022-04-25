@@ -10,7 +10,6 @@ from FaceDetection.FaceDetector import FaceDetector
 import detect_person as dp
 import db_connection as dbc
 
-
 check = 0
 
 class MainWindow(QWidget):
@@ -93,6 +92,7 @@ class MainWindow(QWidget):
 
     def CancelFeed(self):
         self.capture_img.stop()
+    
 
 class capture_img(QThread):
     print("hello")
@@ -169,12 +169,3 @@ class capture_img(QThread):
                         msg = "Duplicate Punch!!"
         return msg
 
-    
-
-if __name__ == "__main__":
-    
-    App = QApplication(sys.argv)
-    # capture_img = capture_img()
-    Root = MainWindow()
-    Root.show()
-    sys.exit(App.exec())
