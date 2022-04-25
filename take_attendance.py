@@ -2,8 +2,10 @@ import sys
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
+from coreapi import Object
 import cv2
 from PyQt5.QtCore import QTimer
+from scipy.__config__ import show
 from FaceDetection.FaceDetector import FaceDetector
 import detect_person as dp
 import db_connection as dbc
@@ -13,7 +15,7 @@ check = 0
 
 class MainWindow(QWidget):
     def __init__(self):
-        super(MainWindow, self).__init__()
+        super(MainWindow,self).__init__()
         self.label = QLabel()
         self.label.setGeometry(QRect(0, 0, 151, 31))
         self.label.setObjectName("datetime")
@@ -49,6 +51,7 @@ class MainWindow(QWidget):
         self.capture_img.start()
         print("hello")
         self.capture_img.ImageUpdate.connect(self.ImageUpdateSlot)
+        print("hello")
         self.setLayout(self.VBL)
         self.timer.timeout.connect(self.setDateTime)
         self.checkin.stateChanged.connect(lambda:self.check_box(self.checkin))
@@ -92,7 +95,7 @@ class MainWindow(QWidget):
         self.capture_img.stop()
 
 class capture_img(QThread):
-
+    print("hello")
     ImageUpdate = pyqtSignal(QImage)
     msg = ""
 
@@ -166,12 +169,12 @@ class capture_img(QThread):
                         msg = "Duplicate Punch!!"
         return msg
 
-
-
-# if __name__ == "__main__":
     
-#     App = QApplication(sys.argv)
-#     # capture_img = capture_img()
-#     Root = MainWindow()
-#     Root.show()
-#     sys.exit(App.exec())
+
+if __name__ == "__main__":
+    
+    App = QApplication(sys.argv)
+    # capture_img = capture_img()
+    Root = MainWindow()
+    Root.show()
+    sys.exit(App.exec())

@@ -5,7 +5,7 @@ from PyQt5 import QtWidgets
 from admin_interface import CreateUser
 from show_info import PersonHistory
 from app import train_data
-from take_attendance import MainWindow
+from take_attendance import MainWindow as TakeAttend
 
 
 class Start_Page(QtWidgets.QMainWindow):
@@ -37,14 +37,14 @@ class Start_Page(QtWidgets.QMainWindow):
 
     def show_take_attend_page(self):
         self.close()
-        Root = MainWindow()
+        Root = TakeAttend()
         Root.show()
 
     
 
-if __name__ == "__main__":
-    import sys 
-    app = QtWidgets.QApplication(sys.argv)
-    ui = Start_Page()
-    ui.show()
-    sys.exit(app.exec_())
+# if __name__ == "__main__":
+#     import sys 
+#     app = QtWidgets.QApplication(sys.argv)
+#     ui = Start_Page()
+#     ui.show()
+#     sys.exit(app.exec_())
