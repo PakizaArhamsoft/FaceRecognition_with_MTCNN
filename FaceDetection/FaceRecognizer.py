@@ -139,20 +139,18 @@ class FaceRecognizer():
 		"""
         import pickle
         model = pickle.load(open('models/CustSVclassifier.pkl', 'rb'))
+        # load decode json
+        with open("models/decode.json", "r") as file:
+            class_decode = json.load(file) 
         yhat_class = model.predict(face_embedding)
         yhat_prob = model.predict_proba(face_embedding)
         # get name
         class_index = yhat_class[0]
         class_probability = yhat_prob[0,class_index] * 100
-        if class_index == 0:
-            person_name = "Allama Iqbal"
-        elif class_index == 1:
-            person_name = "Fatima Jinnah"
-        elif class_index == 2:
-            person_name = "Muhammad Ali Jinnah"
-        elif class_index == 3:
-            person_name = "Sayyed Ahmad Khan"
+        if str(class_index) in class_decode:
 
-        if class_probability<50:
+            person_name = class_decode[str(class_index)]
+        else:
             person_name = "UNKNOWN"
+
         return person_name, class_probability
